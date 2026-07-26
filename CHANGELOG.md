@@ -5,13 +5,13 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/).
 ## [Unreleased]
 
 ### Added
-- Documentación base del proyecto: `README.md`, `docs/ARCHITECTURE.md`, `docs/DATA-MODEL.md`, `docs/API.md`, ADRs (`docs/DECISIONS/0001-0004`).
+- Documentación base del proyecto: `README.md`, `docs/ARCHITECTURE.md`, `docs/DATA-MODEL.md`, `docs/API.md`, ADRs (`docs/DECISIONS/0001-0004`), `docs/TESTING.md`, `docs/DEPLOYMENT.md`, `docs/SECURITY.md`, `docs/RUNBOOK.md`, `docs/ROADMAP.md`, `CONTRIBUTING.md`, PR template.
 - Definición de alcance MVP: catálogo electrónica (laptops, PCs, componentes), delivery con tarifa fija, recojo en múltiples sucursales, sin módulo de reviews.
-- Decisiones de stack: Neon Postgres, Upstash Redis (REST), NextAuth como puente OAuth hacia JWT propio de Nest, Stripe Checkout Sessions.
-- Scaffold inicial backend (NestJS 11) y frontend (Next.js 16 App Router) — sin lógica de negocio aún.
+- Decisiones de stack: Neon Postgres, Upstash Redis (REST), NextAuth como puente OAuth hacia JWT propio de Nest, Stripe Checkout Sessions. Deployment confirmado: Render (backend) + Vercel (frontend), dominios por defecto.
+- Scaffold inicial backend (NestJS 11) y frontend (Next.js 16 App Router).
+- **Fase 1 — infra backend**: `AppConfigModule` con validación de env vars (zod, falla el boot si falta alguna), `DatabaseModule` (TypeORM + Neon Postgres, `synchronize: false`, scripts de migración), `CacheModule`/`RedisService` (Upstash REST, cache-aside `getOrSet`), `GET /health` (sin prefijo/versión, para Render), versionamiento de API por URI (`/api/v1`) habilitado en `main.ts`. Tests unitarios para validación de env, `RedisService` y health controller.
 
 ### Planned (fases siguientes)
-- Fase 1: config Neon + Upstash + validación de env
 - Fase 2: `users` + `auth` (JWT, roles, endpoint OAuth)
 - Fase 3: `categories` + `products` (+ variantes/stock) con cache-aside
 - Fase 4: `pickup-locations`
