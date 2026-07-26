@@ -2,40 +2,33 @@
 
 Tienda digital de productos tecnológicos (laptops, PCs, componentes, periféricos), con delivery (tarifa fija) y recojo personal en sucursales.
 
+Proyecto de portafolio — full-stack e-commerce con backend modular, auth, carrito, checkout y pagos.
+
 ## Stack
 
 **Backend** (`backend/`)
-- NestJS 11 (arquitectura modular)
-- TypeORM sobre **Neon Postgres** (cloud, serverless)
-- **Upstash Redis** (REST, `@upstash/redis`) — cache de catálogo, guest cart, rate limiting, idempotencia de webhooks
-- Auth: JWT + roles (Nest Passport), puente con NextAuth para OAuth
-- Pagos: Stripe (Checkout Sessions + webhooks)
-- Swagger (`@nestjs/swagger`) para docs de API
+- NestJS 11 + TypeORM sobre **Neon Postgres**
+- **Upstash Redis** (REST) — cache de catálogo, guest cart, rate limiting
+- Auth: JWT + roles, puente con NextAuth para OAuth
+- Stripe (Checkout Sessions + webhooks)
+- API versionada por URI (`/api/v1`)
 
 **Frontend** (`frontend/`)
 - Next.js 16 (App Router) + React 19
-- NextAuth (Credentials + Google) — delega emisión de JWT al backend Nest
+- NextAuth (Credentials + Google)
 - Tailwind CSS
 
-## Estructura del repo
+## Estructura
 
 ```
 TechStore/
-├── backend/          # API NestJS
-├── frontend/         # Next.js App Router
-├── docs/             # Documentación técnica (arquitectura, data model, ADRs)
-├── CHANGELOG.md
-└── README.md
+├── backend/     # API NestJS
+└── frontend/    # Next.js App Router
 ```
 
-Ver [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) para el diseño detallado de módulos y flujos, y [`docs/DATA-MODEL.md`](docs/DATA-MODEL.md) para el modelo de datos.
+## Modelo de datos (resumen)
 
-## Requisitos previos
-
-- Node.js 20+
-- Cuenta Neon (Postgres) — connection string con `sslmode=require`
-- Cuenta Upstash (Redis REST) — `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN`
-- Cuenta Stripe (modo test) — `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET`
+`User`, `Category`, `Product` + `ProductVariant`, `PickupLocation`, `Cart`/`CartItem`, `Order`/`OrderItem` (`fulfillmentType`: DELIVERY | PICKUP), `Coupon`, `Payment`, `WishlistItem`.
 
 ## Variables de entorno
 
@@ -48,6 +41,7 @@ JWT_SECRET=
 JWT_EXPIRES_IN=1d
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
+CORS_ORIGIN=http://localhost:3000
 PORT=3001
 ```
 
@@ -57,17 +51,16 @@ NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
-NEXT_PUBLIC_API_URL=http://localhost:3001
+NEXT_PUBLIC_API_URL=http://localhost:3001/api/v1
 ```
 
-## Levantar entorno de desarrollo
+## Levantar en local
 
 ```bash
 # Backend
 cd backend
 npm install
 npm run start:dev      # http://localhost:3001
-# Swagger: http://localhost:3001/api/docs (una vez montado en fase 2)
 
 # Frontend
 cd frontend
@@ -75,18 +68,19 @@ npm install
 npm run dev             # http://localhost:3000
 ```
 
-No requiere Docker: Postgres y Redis son servicios cloud (Neon, Upstash).
+No requiere Docker: Postgres (Neon) y Redis (Upstash) son servicios cloud.
 
-## Scripts útiles
+## Deployment
+
+Backend en **Render**, frontend en **Vercel**, dominios por defecto de cada proveedor.
+
+## Scripts
 
 | Comando | Dónde | Qué hace |
 |---|---|---|
 | `npm run start:dev` | backend | Nest en modo watch |
-| `npm run test` / `test:e2e` | backend | Tests unitarios / e2e |
+| `npm run test` / `test:e2e` | backend | Tests |
+| `npm run migration:run` | backend | Corre migraciones TypeORM contra Neon |
 | `npm run lint` | backend, frontend | Lint |
 | `npm run build` | backend, frontend | Build de producción |
 | `npm run dev` | frontend | Next dev server |
-
-## Estado del proyecto
-
-Ver [`CHANGELOG.md`](CHANGELOG.md) para el historial de avances por fase.
