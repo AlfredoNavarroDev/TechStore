@@ -32,11 +32,11 @@
     "@nestjs/typeorm": "^11.0.3",
     "@upstash/redis": "^1.38.0",
     "dotenv": "^17.4.2",
+    "joi": "^18.2.3",
     "pg": "^8.22.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
-    "typeorm": "^1.1.0",
-    "zod": "^4.4.3"
+    "typeorm": "^1.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
