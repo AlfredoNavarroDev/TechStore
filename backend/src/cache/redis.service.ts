@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Redis } from '@upstash/redis';
 
+// Wrapper delgado sobre el cliente REST de Upstash Redis (sin conexión persistente,
+// funciona bien en entornos serverless/edge).
 @Injectable()
 export class RedisService {
   readonly client: Redis;
@@ -13,10 +15,12 @@ export class RedisService {
     });
   }
 
+  // Lee un valor; null si no existe la key.
   async get<T>(key: string): Promise<T | null> {
     return this.client.get<T>(key);
   }
 
+  // Escribe un valor, con expiración opcional en segundos.
   async set(key: string, value: unknown, ttlSeconds?: number): Promise<void> {
     if (ttlSeconds) {
       await this.client.set(key, value, { ex: ttlSeconds });
@@ -25,6 +29,7 @@ export class RedisService {
     }
   }
 
+  // Invalida/borra una key del cache.
   async del(key: string): Promise<void> {
     await this.client.del(key);
   }
