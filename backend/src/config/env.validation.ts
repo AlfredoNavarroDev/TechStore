@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const envSchema = z.object({
+export const envSchema: z.ZodType<Record<string, unknown>> = z.object({
   NODE_ENV: z
     .enum(['development', 'test', 'production'])
     .default('development'),
