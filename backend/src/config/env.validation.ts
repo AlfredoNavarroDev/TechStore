@@ -29,13 +29,19 @@ export const envSchema: z.ZodType<Record<string, unknown>> = z.object({
   JWT_SECRET: z
     .string()
     .min(32, 'JWT_SECRET debe tener al menos 32 caracteres'),
-  JWT_EXPIRES_IN: z.string().default('1d'),
+  JWT_EXPIRES_IN: z.string().default('15m'),
+  REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(7),
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
 
   // Stripe
   STRIPE_SECRET_KEY: z.string().min(1, 'STRIPE_SECRET_KEY es requerido'),
   STRIPE_WEBHOOK_SECRET: z
     .string()
     .min(1, 'STRIPE_WEBHOOK_SECRET es requerido'),
+
+  // Checkout
+  STOCK_HOLD_TTL_MINUTES: z.coerce.number().int().positive().default(15),
 
   // CORS
   CORS_ORIGIN: z.string().default('http://localhost:3000'),
