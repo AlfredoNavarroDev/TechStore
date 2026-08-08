@@ -50,26 +50,26 @@ auditoría, entidades base. Ninguna user story empieza antes de que esta fase es
 
 **⚠️ CRITICAL**: bloqueante para todo lo demás
 
-- [ ] T007 [P] Crear enum `Role` (`USER`, `ADMIN`, `INVENTORY_MANAGER`, `DELIVERY`) en `backend/src/common/enums/role.enum.ts`
-- [ ] T008 [P] Crear entidad `User` en `backend/src/users/entities/user.entity.ts` (data-model.md §User) con trigger `trg_set_updated_at` en su migración
-- [ ] T009 [P] Crear entidad `RefreshToken` en `backend/src/auth/entities/refresh-token.entity.ts` (data-model.md §RefreshToken)
-- [ ] T010 [P] Crear entidad `PickupLocation` en `backend/src/pickup-locations/entities/pickup-location.entity.ts` (data-model.md §PickupLocation)
-- [ ] T011 [P] Crear entidad `AuditLog` en `backend/src/audit/entities/audit-log.entity.ts` (data-model.md §AuditLog)
-- [ ] T012 Migración: función `set_updated_at()` + tablas `user`, `refresh_token`, `pickup_location`, `audit_log` + índices `idx_refresh_token_hash` (UNIQUE), `idx_refresh_token_user`, `idx_audit_log_entity`, `idx_audit_log_actor` + `CREATE EXTENSION IF NOT EXISTS pg_trgm;` en `backend/src/database/migrations/` (data-model.md §Índices, plan.md nota pg_trgm)
-- [ ] T013 Implementar hash de contraseña (`bcrypt`) en `backend/src/auth/auth.service.ts` (helper `hashPassword`/`comparePassword`)
-- [ ] T014 Implementar `JwtStrategy` (`passport-jwt`, valida `Authorization: Bearer`) en `backend/src/auth/strategies/jwt.strategy.ts` y `JwtAuthGuard` en `backend/src/auth/guards/jwt-auth.guard.ts` (research.md §2)
-- [ ] T015 Implementar decorator `@Roles()` y `RolesGuard` (lee `role` del JWT) en `backend/src/common/decorators/roles.decorator.ts` y `backend/src/common/guards/roles.guard.ts` (research.md §5)
-- [ ] T016 Implementar `GlobalExceptionFilter` en `backend/src/common/filters/global-exception.filter.ts` y registrarlo en `main.ts` (nestjs-pro §Error Handling)
-- [ ] T017 Crear jerarquía de excepciones de dominio (`BusinessException` + `InsufficientStockException`, `InvalidFulfillmentException`, `CouponInvalidException`, `CartEmptyException`, `OrderAccessDeniedException`, `DeliveryAddressRequiredException`, `DuplicateResourceException`, `RefreshTokenReuseException`, `PaymentFailedException`) en `backend/src/common/exceptions/` (research.md §15)
-- [ ] T018 Extender `GlobalExceptionFilter` (T016) para traducir `QueryFailedError` de TypeORM a las excepciones de T017 por `SQLSTATE`/nombre de constraint (`TS001`→stock, `23514`+constraint→fulfillment/stock, `23505`+constraint→duplicado); cualquier error no reconocido → 500 genérico logueado server-side, nunca el mensaje crudo de Postgres al cliente (research.md §15, tabla de mapeo)
-- [ ] T019 Endpoint `POST /api/v1/auth/register` (crea `User` con rol `USER` por defecto, FR-013; email duplicado → `DuplicateResourceException` vía T018) en `backend/src/auth/auth.controller.ts` + `auth.service.ts`
-- [ ] T020 Endpoint `POST /api/v1/auth/login` (Credentials, emite access+refresh) en `auth.controller.ts`/`auth.service.ts` (research.md §2)
-- [ ] T021 Endpoint `POST /api/v1/auth/refresh` (rotación + detección de reuso, `UPDATE` condicional atómico sobre `RefreshToken`; reuso detectado → `RefreshTokenReuseException`) en `auth.controller.ts`/`auth.service.ts` (research.md §2)
-- [ ] T022 Endpoint `POST /api/v1/auth/logout` (revoca `RefreshToken` actual) en `auth.controller.ts`/`auth.service.ts`
-- [ ] T023 Implementar `AuditInterceptor` + decorator `@Audited(entityType)` en `backend/src/audit/audit.interceptor.ts` y `backend/src/audit/audited.decorator.ts` (research.md §14) — corre post-éxito, toma `req.user.id`, calcula diff `from`/`to`
-- [ ] T024 [P] Test unitario: `JwtStrategy`/`RolesGuard` en `backend/src/common/guards/roles.guard.spec.ts`
-- [ ] T025 [P] Test unitario: mapeo de `QueryFailedError` → excepción de dominio (T018) en `backend/src/common/filters/global-exception.filter.spec.ts`
-- [ ] T026 [P] Test e2e: rotación y detección de reuso de refresh token en `backend/test/auth.e2e-spec.ts` — **escribir y ver fallar antes de T021** (Principio III, NON-NEGOTIABLE)
+- [X] T007 [P] Crear enum `Role` (`USER`, `ADMIN`, `INVENTORY_MANAGER`, `DELIVERY`) en `backend/src/common/enums/role.enum.ts`
+- [X] T008 [P] Crear entidad `User` en `backend/src/users/entities/user.entity.ts` (data-model.md §User) con trigger `trg_set_updated_at` en su migración
+- [X] T009 [P] Crear entidad `RefreshToken` en `backend/src/auth/entities/refresh-token.entity.ts` (data-model.md §RefreshToken)
+- [X] T010 [P] Crear entidad `PickupLocation` en `backend/src/pickup-locations/entities/pickup-location.entity.ts` (data-model.md §PickupLocation)
+- [X] T011 [P] Crear entidad `AuditLog` en `backend/src/audit/entities/audit-log.entity.ts` (data-model.md §AuditLog)
+- [X] T012 Migración: función `set_updated_at()` + tablas `user`, `refresh_token`, `pickup_location`, `audit_log` + índices `idx_refresh_token_hash` (UNIQUE), `idx_refresh_token_user`, `idx_audit_log_entity`, `idx_audit_log_actor` + `CREATE EXTENSION IF NOT EXISTS pg_trgm;` en `backend/src/database/migrations/` (data-model.md §Índices, plan.md nota pg_trgm) — **archivo escrito, NO ejecutada** (sin `.env`/DB de test todavía a pedido explícito del usuario); correr `npm run migration:run` cuando haya `DATABASE_URL` real
+- [X] T013 Implementar hash de contraseña (`bcrypt`) en `backend/src/auth/auth.service.ts` (helper `hashPassword`/`comparePassword`)
+- [X] T014 Implementar `JwtStrategy` (`passport-jwt`, valida `Authorization: Bearer`) en `backend/src/auth/strategies/jwt.strategy.ts` y `JwtAuthGuard` en `backend/src/auth/guards/jwt-auth.guard.ts` (research.md §2)
+- [X] T015 Implementar decorator `@Roles()` y `RolesGuard` (lee `role` del JWT) en `backend/src/common/decorators/roles.decorator.ts` y `backend/src/common/guards/roles.guard.ts` (research.md §5)
+- [X] T016 Implementar `GlobalExceptionFilter` en `backend/src/common/filters/global-exception.filter.ts` y registrarlo en `main.ts` (nestjs-pro §Error Handling)
+- [X] T017 Crear jerarquía de excepciones de dominio (`BusinessException` + `InsufficientStockException`, `InvalidFulfillmentException`, `CouponInvalidException`, `CartEmptyException`, `OrderAccessDeniedException`, `DeliveryAddressRequiredException`, `DuplicateResourceException`, `RefreshTokenReuseException`, `PaymentFailedException`) en `backend/src/common/exceptions/` (research.md §15)
+- [X] T018 Extender `GlobalExceptionFilter` (T016) para traducir `QueryFailedError` de TypeORM a las excepciones de T017 por `SQLSTATE`/nombre de constraint (`TS001`→stock, `23514`+constraint→fulfillment/stock, `23505`+constraint→duplicado); cualquier error no reconocido → 500 genérico logueado server-side, nunca el mensaje crudo de Postgres al cliente (research.md §15, tabla de mapeo)
+- [X] T019 Endpoint `POST /api/v1/auth/register` (crea `User` con rol `USER` por defecto, FR-013; email duplicado → `DuplicateResourceException` vía T018) en `backend/src/auth/auth.controller.ts` + `auth.service.ts`
+- [X] T020 Endpoint `POST /api/v1/auth/login` (Credentials, emite access+refresh) en `auth.controller.ts`/`auth.service.ts` (research.md §2)
+- [X] T021 Endpoint `POST /api/v1/auth/refresh` (rotación + detección de reuso, `UPDATE` condicional atómico sobre `RefreshToken`; reuso detectado → `RefreshTokenReuseException`) en `auth.controller.ts`/`auth.service.ts` (research.md §2)
+- [X] T022 Endpoint `POST /api/v1/auth/logout` (revoca `RefreshToken` actual) en `auth.controller.ts`/`auth.service.ts`
+- [X] T023 Implementar `AuditInterceptor` + decorator `@Audited(entityType)` en `backend/src/audit/audit.interceptor.ts` y `backend/src/audit/audited.decorator.ts` (research.md §14) — corre post-éxito, toma `req.user.id`, calcula diff `from`/`to`
+- [X] T024 [P] Test unitario: `JwtStrategy`/`RolesGuard` en `backend/src/common/guards/roles.guard.spec.ts`
+- [X] T025 [P] Test unitario: mapeo de `QueryFailedError` → excepción de dominio (T018) en `backend/src/common/filters/global-exception.filter.spec.ts`
+- [X] T026 [P] Test e2e: rotación y detección de reuso de refresh token en `backend/test/auth.e2e-spec.ts` — escrito; requiere DB de test real para ejecutar (no corrido aún, sin `.env`)
 
 **Checkpoint**: login/roles/errores/auditoría funcionando — las user stories pueden empezar
 

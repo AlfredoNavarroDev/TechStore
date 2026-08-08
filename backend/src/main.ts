@@ -21,7 +21,10 @@ async function bootstrap() {
   // Versionado por URI: /api/v1/... ; defaultVersion evita romper rutas sin versión explícita.
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
   // CORS restringido al origen del frontend configurado via env.
-  app.enableCors({ origin: config.get<string>('CORS_ORIGIN'), credentials: true });
+  app.enableCors({
+    origin: config.get<string>('CORS_ORIGIN'),
+    credentials: true,
+  });
 
   // whitelist+forbidNonWhitelisted: cualquier campo no declarado en el DTO es rechazado (400),
   // no silenciosamente descartado — evita mass-assignment hacia columnas no expuestas.

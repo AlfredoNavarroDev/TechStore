@@ -31,8 +31,9 @@ export const envSchema: z.ZodType<Record<string, unknown>> = z.object({
     .min(32, 'JWT_SECRET debe tener al menos 32 caracteres'),
   JWT_EXPIRES_IN: z.string().default('15m'),
   REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(7),
+  // Solo para verificar el id_token de Google (audiencia) — el client secret
+  // vive únicamente en el frontend (NextAuth hace el intercambio OAuth).
   GOOGLE_CLIENT_ID: z.string().optional(),
-  GOOGLE_CLIENT_SECRET: z.string().optional(),
 
   // Stripe
   STRIPE_SECRET_KEY: z.string().min(1, 'STRIPE_SECRET_KEY es requerido'),

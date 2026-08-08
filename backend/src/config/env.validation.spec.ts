@@ -16,7 +16,7 @@ describe('validateEnv', () => {
 
     expect(result.NODE_ENV).toBe('development');
     expect(result.PORT).toBe(3001);
-    expect(result.JWT_EXPIRES_IN).toBe('1d');
+    expect(result.JWT_EXPIRES_IN).toBe('15m');
     expect(result.CORS_ORIGIN).toBe('http://localhost:3000');
   });
 

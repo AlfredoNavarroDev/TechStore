@@ -7,6 +7,7 @@ import { AppConfigModule } from './config/config.module';
 import { DatabaseModule } from './database/database.module';
 import { CacheModule } from './cache/cache.module';
 import { HealthController } from './health/health.controller';
+import { CommonModule } from './common/common.module';
 import { AuditModule } from './audit/audit.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
@@ -25,17 +26,10 @@ import { PickupLocationsModule } from './pickup-locations/pickup-locations.modul
     // entre instancias a esta escala de portafolio.
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }]),
     CommonModule,
+    UsersModule,
     AuditModule,
     AuthModule,
-    UsersModule,
     PickupLocationsModule,
-    CategoriesModule,
-    ProductsModule,
-    CartModule,
-    OrdersModule,
-    PaymentsModule,
-    CouponsModule,
-    PromotionsModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
